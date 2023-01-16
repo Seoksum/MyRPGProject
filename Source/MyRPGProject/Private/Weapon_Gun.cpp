@@ -41,8 +41,9 @@ void AWeapon_Gun::BeginPlay()
 	TimeBetweenShots = 60.f / RateOfFire;
 }
 
-void AWeapon_Gun::Fire()
+void AWeapon_Gun::Attack()
 {
+	Super::Attack();
 	AActor* MyOwner = GetOwner();
 	if (MyOwner)
 	{
@@ -81,13 +82,12 @@ void AWeapon_Gun::Fire()
 		PlayFireEffects(TraceEndPoint);
 		LastFiredTime = GetWorld()->TimeSeconds; // 마지막 발사 시간을 기록(World의 time)
 	}
-}	// 1 + 0.1 - 1
+}	
 
 void AWeapon_Gun::StartFire()
 {
 	float FirstDelay = FMath::Max(LastFiredTime + TimeBetweenShots - GetWorld()->TimeSeconds, 0.f);
-	UE_LOG(LogTemp, Log, TEXT("First Delay : %f ,LastFiredTime : %f , TimeBetweenShots : %f, GetWolrd()->TimeSecons : %f"), FirstDelay, LastFiredTime, TimeBetweenShots,GetWorld()->TimeSeconds);
-	GetWorldTimerManager().SetTimer(TimerHandle_TimeBetweenShots, this, &AWeapon_Gun::Fire, TimeBetweenShots, true, FirstDelay);
+	GetWorldTimerManager().SetTimer(TimerHandle_TimeBetweenShots, this, &AWeapon_Gun::Attack, TimeBetweenShots, true, FirstDelay);
 	UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
 }
 

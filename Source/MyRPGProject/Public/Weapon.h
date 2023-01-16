@@ -24,4 +24,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USkeletalMeshComponent* MeshComp;
 
+	virtual void Attack();
+	virtual void Attack(int32 damage, float TraceDistance, class UParticleSystem* Particle);
+
 };

@@ -35,8 +35,10 @@ void AWeapon_Bow::BeginPlay()
 	
 }
 
-void AWeapon_Bow::ShootArrow()
+void AWeapon_Bow::Attack()
 {
+	Super::Attack();
+
 	AActor* MyOwner = GetOwner();
 	if (MyOwner)
 	{

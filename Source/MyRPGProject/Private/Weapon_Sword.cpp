@@ -32,6 +32,8 @@ void AWeapon_Sword::BeginPlay()
 
 void AWeapon_Sword::Attack(int32 damage, float TraceDistance, UParticleSystem* Particle)
 {
+	Super::Attack(damage, TraceDistance, Particle);
+
 	AActor* MyOwner = GetOwner();
 	if (MyOwner)
 	{

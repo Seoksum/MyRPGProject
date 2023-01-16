@@ -18,7 +18,7 @@ public:
 
 	AWeapon_Bow();
 
-	void ShootArrow();
+	void Attack() override;
 
 protected:
 

@@ -20,7 +20,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	void Attack(int32 damage, float TraceDistance, class UParticleSystem* Particle);
+	void Attack(int32 damage, float TraceDistance, class UParticleSystem* Particle) override;
 
 
 

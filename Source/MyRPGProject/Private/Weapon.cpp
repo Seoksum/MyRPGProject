@@ -16,3 +16,11 @@ void AWeapon::BeginPlay()
 	
 }
 
+void AWeapon::Attack()
+{
+}
+
+void AWeapon::Attack(int32 damage, float TraceDistance, UParticleSystem* Particle)
+{
+}
+

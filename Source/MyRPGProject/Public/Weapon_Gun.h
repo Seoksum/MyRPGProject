@@ -18,14 +18,13 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	void Fire();
+	void Attack() override;
 
 public:
 	void StartFire();
 	void StopFire();
 
 	void PlayFireEffects(FVector TraceEndPoint);
-
 	void PlayImpactEffects(FVector ImpactPoint, UParticleSystem* Particle);
 
 

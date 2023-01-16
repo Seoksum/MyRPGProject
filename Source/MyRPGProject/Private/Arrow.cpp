@@ -29,8 +29,6 @@ AArrow::AArrow()
 
 	ProjectileMovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
 	ProjectileMovementComp->UpdatedComponent = CollisionComp;
-	ProjectileMovementComp->ProjectileGravityScale = 1.f;
-	ProjectileMovementComp->InitialSpeed = 4000.f;
 	ProjectileMovementComp->MaxSpeed = 4000.f;
 	ProjectileMovementComp->bRotationFollowsVelocity = false;
 	ProjectileMovementComp->bInitialVelocityInLocalSpace = true;
