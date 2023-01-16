@@ -7,7 +7,6 @@
 
 AItem::AItem()
 {
-	Weight = 1.f;
 	ItemName = FText::FromString("Item");
 	UseActionText = FText::FromString("Use");
 

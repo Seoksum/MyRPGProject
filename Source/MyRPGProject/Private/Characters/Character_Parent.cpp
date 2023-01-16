@@ -52,12 +52,13 @@ ACharacter_Parent::ACharacter_Parent()
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -88.f), FRotator(0.f, -90.f, 0.f));
 	GetCapsuleComponent()->BodyInstance.SetCollisionProfileName(FName("PlayerCharacter"));
-	//GetCapsuleComponent()->SetCollisionProfileName(FName("MyCharacter"));
 	GetCapsuleComponent()->SetGenerateOverlapEvents(true);
 
 	MyPlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
 	Stat = CreateDefaultSubobject<UMyStatComponent>(TEXT("STAT"));
+
+	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 
 	HpBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBAR"));
 	HpBar->SetupAttachment(GetMesh());
@@ -71,8 +72,6 @@ ACharacter_Parent::ACharacter_Parent()
 		HpBar->SetDrawSize(FVector2D(200.f, 50.f));
 	}
 
-	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
-
 
 	CurrentWeaponIndex = 0;
 
@@ -83,8 +82,10 @@ ACharacter_Parent::ACharacter_Parent()
 
 	MyGameInstanceRef = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (MyGameInstanceRef)
+	{
 		Level = MyGameInstanceRef->GetNowLevel();
-
+		// 플레이어의 시작 레벨은 2입니다. 
+	}
 }
 
 // Called when the game starts or when spawned
@@ -117,9 +118,8 @@ void ACharacter_Parent::BeginPlay()
 		Bow->SetHidden(true);
 	}
 
-	CurrentWeapon = Sword;
-
-
+	CurrentWeapon = Sword; 
+	// 첫 기본 보여지는 무기는 검입니다. 
 }
 
 void ACharacter_Parent::PostInitializeComponents()
@@ -132,6 +132,7 @@ void ACharacter_Parent::PostInitializeComponents()
 	{
 		HpWidget->BindHp(Stat);
 		HpWidget->BindMana(Stat);
+		// 캐릭터 머리 위의 체력바를 Bind 해줍니다.
 	}
 
 	if (MyPlayerController)
@@ -142,6 +143,7 @@ void ACharacter_Parent::PostInitializeComponents()
 			MyHUD->BindHp(Stat);
 			MyHUD->BindMana(Stat);
 			MyHUD->BindLevel(Stat);
+			// 좌측 하단의 체력바와 레벨을 Bind 해줍니다.
 		}
 	}
 
@@ -155,7 +157,6 @@ void ACharacter_Parent::PostInitializeComponents()
 	}
 
 	Stat->OnPlayerLevelUp.AddUObject(this, &ACharacter_Parent::LevelUp);
-
 }
 
 // Called every frame
@@ -168,12 +169,15 @@ void ACharacter_Parent::Tick(float DeltaTime)
 		float TargetFOV = bWantsToZoom ? ZoomedFOV : DefaultFOV;
 		float NewFOV = FMath::FInterpTo(Camera->FieldOfView, TargetFOV, DeltaTime, ZoomInterpSpeed);
 		Camera->SetFieldOfView(NewFOV);
+		// 무기가 총이나 활일 경우 마우스 우클릭을 하면 줌인됩니다. 
+		// 자연스러운 줌인을 위해 FInterpTo 함수를 사용합니다. 
 	}
 
 	if (bIsClimbingUp && bIsOnWall)
 	{
 		FVector Loc = GetActorLocation();
 		SetActorLocation(FVector(Loc.X, Loc.Y, Loc.Z + 1.5f));
+		// 등반하는 상황이라면 플레이어를 Z축으로 이동시킵니다. 
 	}
 
 }
@@ -190,8 +194,6 @@ void ACharacter_Parent::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis(TEXT("Yaw"), this, &ACharacter_Parent::Yaw);
 	PlayerInputComponent->BindAxis(TEXT("Pitch"), this, &ACharacter_Parent::Pitch);
 	PlayerInputComponent->BindAxis(TEXT("CameraZoom"), this, &ACharacter_Parent::CameraZoom);
-
-
 
 	PlayerInputComponent->BindAction(TEXT("Sprint"), EInputEvent::IE_Pressed, this, &ACharacter_Parent::Sprint);
 	PlayerInputComponent->BindAction(TEXT("Sprint"), EInputEvent::IE_Released, this, &ACharacter_Parent::StopSprinting);
@@ -223,6 +225,7 @@ void ACharacter_Parent::OnDeath_Implementation()
 	if (GameMode)
 	{
 		GameMode->PawnKilled(this);
+		// PawnKilled 함수에 자신을 전달합니다. 게임 패배입니다. 
 	}
 
 	DetachFromControllerPendingDestroy();
@@ -277,6 +280,7 @@ void ACharacter_Parent::DoubleJump()
 {
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	bIsOnWall = false;
+	// 벽에 붙어있는 상태에서 점프를 하면 공중에서 떨어지면서 Walking 모드로 변환됩니다. 
 
 	if (DoubleJumpCounter == 0)
 	{
@@ -307,6 +311,7 @@ void ACharacter_Parent::CameraZoom(const float Value)
 
 	const float NewTargetArmLength = SpringArm->TargetArmLength + Value * 10.f;
 	SpringArm->TargetArmLength = FMath::Clamp(NewTargetArmLength, 200.f, 1000.f);
+	// 마우스 휠을 이용해 200.f ~ 1000.f 사이의 거리로 설정할 수 있습니다. 
 }
 
 void ACharacter_Parent::BeginZoom()
@@ -345,27 +350,30 @@ void ACharacter_Parent::StopFire()
 	if (CurrentWeaponIndex == EWeapon::Gun)
 	{
 		Gun->StopFire();
+		// 왼쪽 마우스를 떼면 총의 공격은 멈춥니다. 
 	}
 }
 
 void ACharacter_Parent::EndAttack_Q()
 {
+	// Q스킬의 쿨타임 세기 
 	UInGame* InGame = Cast<UInGame>(MyPlayerController->CurrentWidget);
 
 	FString Q_Str;
-	if (Remaining_SkillQ < 1)
+	if (Remaining_SkillQ < 1) // 쿨타임이 끝나면
 	{
-		Q_Str = FString::Printf(TEXT("Q"));
-		IsAttackingQ = false;
-		GetWorldTimerManager().ClearTimer(QSkillHandle);
+		Q_Str = FString::Printf(TEXT("Q")); // 다시 'Q' 텍스트로 바뀌고
+		IsAttackingQ = false; // Q 스킬을 사용할 수 있습니다. 
+		GetWorldTimerManager().ClearTimer(QSkillHandle); // 타이머 종료
 	}
 	else
 	{
-		Q_Str = FString::Printf(TEXT("%01d "), Remaining_SkillQ);
+		Q_Str = FString::Printf(TEXT("%01d "), Remaining_SkillQ); 
+		// 남아있는 쿨타임을 보여줍니다.
 	}
 
 	InGame->Text_Q->SetText(FText::FromString(Q_Str));
-	--Remaining_SkillQ;
+	--Remaining_SkillQ; // 1초씩 감소합니다. 
 }
 
 void ACharacter_Parent::EndAttack_E()
@@ -413,7 +421,8 @@ void ACharacter_Parent::EndAttack_R()
 float ACharacter_Parent::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	Stat->OnAttacked(DamageAmount);
+
+	Stat->OnAttacked(DamageAmount); // 체력이 감소되고, 체력바의 PrgressBar도 업데이트 됩니다. 
 	return DamageAmount;
 }
 
@@ -421,9 +430,11 @@ float ACharacter_Parent::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 
 void ACharacter_Parent::Interact()
 {
-	if (CurrentInteractable != nullptr)
+	// 'Z"키를 눌러 아이템을 수집할 수 있습니다. 
+	if (CurrentInteractable != nullptr) 
 	{
-		CurrentInteractable->OnPickedUp(this);
+		CurrentInteractable->OnPickedUp(this); 
+		// 현재 Overlap된 아이템이 존재한다면 수집할 수 있습니다. 
 	}
 }
 
@@ -431,8 +442,7 @@ bool ACharacter_Parent::AddItemToInventory(class AItem* Item)
 {
 	if (Item != NULL)
 	{
-		Inventory->AddItem(Item);
-
+		Inventory->AddItem(Item); // 인벤토리에 아이템을 추가합니다. 
 		CurrentInteractable = nullptr;
 		return true;
 	}
@@ -447,17 +457,18 @@ void ACharacter_Parent::CheckForInteractable(class AItem* PickItem)
 		return;
 	}
 	CurrentInteractable = PickItem;
+	// 현재 Overlap된 아이템이 존재한다면 CurrentInteractable에 넣어줍니다. 
 }
 
 void ACharacter_Parent::UseItem(class AItem* Item)
 {
-	Item->Use(this);
-	Inventory->RemoveItem(Item);
+	Item->Use(this); // Use 가상 함수를 호출하여 각 아이템은 구현된 기능을 합니다. 
+	Inventory->RemoveItem(Item); // 인벤토리에서 아이템을 제거합니다. 
 }
 
 void ACharacter_Parent::SelectWeapon()
 {
-	// o키를 누르면 무기 창을 보여줍니다. 
+	// 'O'키를 누르면 무기 창을 보여줍니다. 
 	if (MyPlayerController->bOnWeaponHUD) // 이미 무기 창이 화면에 존재한다면 
 	{
 		MyPlayerController->RemoveHUD(MyPlayerController->HS_Weapon);
@@ -472,7 +483,7 @@ void ACharacter_Parent::SelectWeapon()
 
 void ACharacter_Parent::SelectInventory()
 {
-	// 탭키를 누르면 인벤토리 창을 보여줍니다. 
+	// '탭'키를 누르면 인벤토리 창을 보여줍니다. 
 	if (MyPlayerController->bOnInventoryHUD) // 이미 인벤토리 창이 화면에 존재한다면 
 	{
 		MyPlayerController->RemoveHUD(MyPlayerController->HS_Inventory);
@@ -580,6 +591,7 @@ void ACharacter_Parent::CameraShake(TSubclassOf<class UCameraShakeBase> Cam)
 	if (MyPlayerController)
 	{
 		MyPlayerController->ClientPlayCameraShake(Cam);
+		// 플레이어 컨트롤러를 이용해 카메라를 흔들어줍니다. 
 	}
 }
 
@@ -589,7 +601,7 @@ void ACharacter_Parent::LevelUp()
 	UGameplayStatics::SpawnEmitterAttached(LevelupEffect, GetMesh());
 	UGameplayStatics::PlaySoundAtLocation(this, LevelupSound, GetActorLocation());
 
-	// 레벨업
+	// 레벨업하여 플레이어의 체력을 Max값으로 설정합니다.
 	Level++;
 	MyGameInstanceRef->SetNowLevel(Level);
 	Stat->SetPlayerLevel(Level);

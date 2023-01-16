@@ -23,14 +23,12 @@ public:
 
 
 public:
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item", meta = (ClampMin = 0.0f))
 	float HpPotionVal;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item", meta = (ClampMin = 0.0f))
 	float ManaPotionVal;
-
-	
-
 	
 
 };

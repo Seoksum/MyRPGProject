@@ -16,12 +16,11 @@ public:
 
 	virtual void BeginPlay() override;
 
-	/*virtual class UWorld* GetWorld() const { return GetWorld(); };*/
-
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	virtual void Use(class ACharacter_Parent* PlayerCharacter);
+	// 아이템마다 사용 효과가 다를 것이므로 가상함수로 선언 
 
 	void OnPickedUp(ACharacter_Parent* PlayerCharacter);
 
@@ -47,12 +46,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item", meta = (MultiLine = true))
 	FText ItemDescription;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item", meta = (ClampMin = 0.0f))
-	float Weight;
-
 	UPROPERTY()
 	TWeakObjectPtr<class UInventoryComponent> OwingInventory;
-
 
 
 };
