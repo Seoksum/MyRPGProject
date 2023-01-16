@@ -41,6 +41,11 @@ void UInventoryComponent::RemoveItem(AItem* Item)
 	return;
 }
 
+TArray<class AItem*> UInventoryComponent::GetItems()
+{
+	return Items;
+}
+
 
 
 

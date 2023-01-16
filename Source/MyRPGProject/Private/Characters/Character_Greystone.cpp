@@ -125,32 +125,34 @@ void ACharacter_Greystone::Attack()
 
 void ACharacter_Greystone::AttackQ_Implementation()
 {
-	if (CurrentWeaponIndex != EWeapon::Sword || IsAttackingQ || Stat->GetMana() < 0.f)
+	int32 ManaQ = Mana;
+	if (CurrentWeaponIndex != EWeapon::Sword || IsAttackingQ || Stat->GetMana()- ManaQ <= 0.f)
 		return;
-	
+
 	IsAttackingQ = true;
 	AnimInstance->PlayAttackMontageQ();
-	Stat->OnAttacking(Mana); //Mana 크기만큼 플레이어의 마나 소모
+	Stat->OnAttacking(ManaQ); //Mana 크기만큼 플레이어의 마나 소모
 	Remaining_SkillQ = 3;
 	GetWorldTimerManager().SetTimer(QSkillHandle, this, &ACharacter_Greystone::EndAttack_Q, 1.f, true);
 }
 
 void ACharacter_Greystone::AttackE_Implementation()
 {
-	if (CurrentWeaponIndex != EWeapon::Sword || IsAttackingE || Stat->GetMana() < 0.f)
+	int32 ManaE = Mana + 5;
+	if (CurrentWeaponIndex != EWeapon::Sword || IsAttackingE || Stat->GetMana() - ManaE <= 0.f)
 		return;
 
 	IsAttackingE = true;
 	AnimInstance->PlayAttackMontageE();
 	Remaining_SkillE = 6;
-
-	Stat->OnAttacking(Mana + 5);
+	Stat->OnAttacking(ManaE);
 	GetWorldTimerManager().SetTimer(ESkillHandle, this, &ACharacter_Greystone::EndAttack_E, 1.f, true);
 }
 
 void ACharacter_Greystone::AttackR_Implementation()
 {
-	if (CurrentWeaponIndex != EWeapon::Sword || IsAttackingR || Stat->GetMana() < 0.f)
+	int32 ManaR = Mana + 10;
+	if (CurrentWeaponIndex != EWeapon::Sword || IsAttackingR || Stat->GetMana()-ManaR <= 0.f)
 		return;
 
 	IsAttackingR = true;
@@ -159,7 +161,7 @@ void ACharacter_Greystone::AttackR_Implementation()
 	
 	AnimInstance->PlayAttackMontageR();
 
-	Stat->OnAttacking(Mana + 10);
+	Stat->OnAttacking(ManaR);
 	GetWorldTimerManager().SetTimer(RSkillHandle, this, &ACharacter_Greystone::EndAttack_R, 1.f, true);
 }
 

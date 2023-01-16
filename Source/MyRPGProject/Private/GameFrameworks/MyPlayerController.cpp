@@ -238,7 +238,7 @@ void AMyPlayerController::RemoveHUD(uint8 State)
 	}
 	}
 
-	if (!bOnInventoryHUD && !bOnWeaponHUD)
+	if (!bOnInventoryHUD && !bOnWeaponHUD) // 어떠한 창도 없으면 마우스 커서를 숨깁니다. 
 	{
 		bShowMouseCursor = false;
 		bEnableClickEvents = false;
@@ -247,6 +247,7 @@ void AMyPlayerController::RemoveHUD(uint8 State)
 
 void AMyPlayerController::AddCrossWidget()
 {
+	// 화면에 십자선 창 추가하기 
 	CrosshairWidget = CreateWidget(GetWorld(), CrosshairClass);
 	if (CrosshairWidget)
 		CrosshairWidget->AddToViewport();
@@ -254,6 +255,7 @@ void AMyPlayerController::AddCrossWidget()
 
 void AMyPlayerController::RemoveCrossWidget()
 {
+	// 화면에 십자선 창 제거하기 
 	if (CrosshairWidget)
 		CrosshairWidget->RemoveFromViewport();
 }

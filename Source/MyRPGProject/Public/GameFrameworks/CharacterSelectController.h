@@ -25,8 +25,8 @@ public:
 
 public:
 	UPROPERTY(EditDefaultsOnly)
-		TSubclassOf<class UCharacterSelectionWidget> BP_SelectWidget;
+	TSubclassOf<class UCharacterSelectionWidget> BP_SelectWidget;
 
-		class UCharacterSelectionWidget* SelectWidget;
+	class UCharacterSelectionWidget* SelectWidget;
 	
 };

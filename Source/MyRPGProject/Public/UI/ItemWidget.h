@@ -29,8 +29,8 @@ protected:
 
 public:
 
-	UPROPERTY(BlueprintReadWrite, Category = "Item", meta=(ExposeOnSpawn = true))
-		class AItem* Item;
+	UPROPERTY(BlueprintReadWrite, Category = "Item")
+	class AItem* Item;
 
 	TWeakObjectPtr<class UInventoryComponent> Inventory;
 

@@ -14,15 +14,12 @@ class MYRPGPROJECT_API UInGame : public UUserWidget
 {
 	GENERATED_BODY()
 	
-protected:
-	virtual void NativeOnInitialized();
 
 public:
 
-	UInGame(const FObjectInitializer& ObjectInitializer);
-
 	void SetGreystone();
 	void SetCountess();
+	void SetCharacterSkillThumbnail(FString Q_Path, FString E_Path, FString R_Path);
 
 	void SetLevel();
 	void BindLevel(class UMyStatComponent* StatComp);
@@ -34,8 +31,6 @@ public:
 	void UpdateMana();
 
 public:
-	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* LevelText;
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Level;

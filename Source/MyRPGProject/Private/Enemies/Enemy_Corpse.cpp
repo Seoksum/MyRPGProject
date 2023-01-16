@@ -63,7 +63,7 @@ void AEnemy_Corpse::Attack()
 {
 	Super::Attack();
 
-	if (IsAttacking || Stat->GetEnemyHp() <= 0.f)
+	if (IsAttacking || IsDeath)
 		return;
 
 	AnimInstance->PlayAttackMontage_Corpse();

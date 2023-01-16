@@ -65,7 +65,7 @@ void AEnemy_Boss::Attack()
 {
 	Super::Attack();
 
-	if (IsAttacking || Stat->GetEnemyHp() <= 0.f)
+	if (IsAttacking)
 		return;
 
 	IsAttacking = true;

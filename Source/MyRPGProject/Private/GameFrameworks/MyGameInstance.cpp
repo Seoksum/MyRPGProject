@@ -28,12 +28,12 @@ void UMyGameInstance::Init()
 	NowLevel = 2;
 	NowHp = GetStatData(NowLevel)->MaxHp;
 	NowMana = GetStatData(NowLevel)->MaxMana;
-
 }
 
 FCharacterData* UMyGameInstance::GetStatData(int32 Level)
 {
 	return MyStatTable->FindRow<FCharacterData>(*FString::FromInt(Level), TEXT(""));
+	// 인자로 받아온 행에 대한 데이터 테이블의 열 값 데이터들을 받아올 수 있습니다. 
 }
 
 void UMyGameInstance::SetCharacterTypeIndex(int32 Index)

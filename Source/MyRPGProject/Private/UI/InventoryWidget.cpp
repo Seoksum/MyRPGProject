@@ -36,8 +36,8 @@ void UInventoryWidget::NativeOnInitialized()
 
 void UInventoryWidget::RefreshInventory()
 {
-	//InventoryBox->ClearChildren();
-	TArray<class AItem*> CurrentItems = Inventory->Items;
+	InventoryBox->ClearChildren(); // 중복 위젯 생성을 방지하기 위해 우선 Clear 해줍니다. 
+	TArray<class AItem*> CurrentItems = Inventory->GetItems();
 
 	for (auto& Item : CurrentItems)
 	{
@@ -51,26 +51,6 @@ void UInventoryWidget::RefreshInventory()
 			}
 		}
 	}
-}
-
-void UInventoryWidget::InitializeInventory(class UInventoryComponent* InventoryComponent)
-{
-	InventoryBox->ClearChildren();
-	TArray<class AItem*> DefaultItems = InventoryComponent->Items;
-
-	for (auto& Item : DefaultItems)
-	{
-		if (Item)
-		{
-			auto ItemWidget = CreateWidget<UItemWidget>(GetOwningPlayer(), ItemHUDClass);
-			if (ItemWidget)
-			{
-				InventoryBox->AddChildToWrapBox(ItemWidget);
-				ItemWidget->SetItemInfo(Item);
-			}
-		}
-	}
-
 }
 
 void UInventoryWidget::OnClickedCloseButton()

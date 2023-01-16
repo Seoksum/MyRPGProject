@@ -33,11 +33,11 @@ void ACharacterSelectController::HideCharacterMenu()
 {
 	if (BP_SelectWidget != nullptr)
 	{
-		SelectWidget->RemoveFromParent();
-		SelectWidget->Destruct();
-
 		SetInputMode(FInputModeGameOnly());
 		bShowMouseCursor = false;
+
+		SelectWidget->RemoveFromParent();
+		SelectWidget->Destruct();
 	}
 }
 

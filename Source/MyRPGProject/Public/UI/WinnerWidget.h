@@ -24,6 +24,6 @@ protected:
 private:
 
 	UPROPERTY(meta = (BindWidget))
-		class UButton* RestartButton;
+	class UButton* RestartButton;
 
 };

@@ -21,44 +21,31 @@ void URestartMapWidget::NativeOnInitialized()
 	if (MyGameInstanceRef)
 	{
 		int32 NowRemainingCount = MyGameInstanceRef->GetRemainingCount();
-		//NowRemainingCount--;
-		const FString RMCount = FString::Printf(TEXT("%d"), NowRemainingCount);
-		RemainingText->SetText(FText::FromString(RMCount));
+		const FString FStringRemaingCount = FString::Printf(TEXT("%d"), NowRemainingCount);
+		RemainingText->SetText(FText::FromString(FStringRemaingCount)); // 현재 남아있는 목숨 횟수를 보여줍니다. 
 	}
 }
 
 void URestartMapWidget::ClickRespawnBtn()
 {
-	//MyGameInstanceRef = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	//if (MyGameInstanceRef)
-	//{
-	//	int32 NowRemainingCount = MyGameInstanceRef->GetRemainingCount();
-	//	if (NowRemainingCount <= 0)
-	//	{
-	//		int32 NowRemainingCount = 3;
-	//		MyGameInstanceRef->SetRemainingCount(NowRemainingCount);
-	//		UGameplayStatics::OpenLevel(GetWorld(), FName("CharSelectMap"));
-	//		return;
-	//	}
-	//}
-
+	// Respawn 버튼을 눌렀을 때
 	MyPlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	if (MyPlayerController)
 	{
-		MyPlayerController->ChangeHUDState(MyPlayerController->HS_Ingame);
-		MyPlayerController->RestartLevel();
+		MyPlayerController->ChangeHUDState(MyPlayerController->HS_Ingame); // 인게임 창이 뜨고 
+		MyPlayerController->RestartLevel(); // 맵을 재시작 합니다. 
 	}
-
 }
 
 void URestartMapWidget::ClickTitleBtn()
 {
+	// 타이틀 버튼을 눌렀을 때
 	MyGameInstanceRef = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (MyGameInstanceRef)
 	{
-		MyGameInstanceRef->SetRemainingCount(3);
+		MyGameInstanceRef->SetRemainingCount(3); // Respawn 가능 횟수를 다시 3회로 초기화합니다. 
 		MyGameInstanceRef->IsRestarting = true;
 	}
-	UGameplayStatics::OpenLevel(GetWorld(), FName("CharSelectMap"));
+	UGameplayStatics::OpenLevel(GetWorld(), FName("CharSelectMap")); // 캐릭터 고르는 맵으로 이동합니다. 
 }
 

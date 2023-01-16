@@ -23,6 +23,7 @@ public:
 
 private:
 	TWeakObjectPtr<class UMyStatComponent> CurrentStatComp;
+	// Enemy의 StatComponent를 Weak 포인터로 참조하기 
 
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar* PB_HpBar;

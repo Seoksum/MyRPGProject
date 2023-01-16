@@ -24,32 +24,28 @@ protected:
 
 	virtual void InitializeComponent() override;
 
-
 public:
 
 	void SetEnemyLevel(int32 NewLevel);
 	void SetPlayerLevel(int32 NewLevel);
 
-	void OnAttacked(float DamageAmount);
-	void OnAttacking(float ManaAmount);
+	void OnAttacked(float DamageAmount);// 공격 받으면 HP 감소
+	void OnAttacking(float ManaAmount);	// 공격 하면 Mana 감소
 
-	void UseHpPotion(float Amount);
-	void UseManaPotion(float Amount);
+	void UseHpPotion(float Amount);		// Hp 포션 아이템 클릭시 HP 증가
+	void UseManaPotion(float Amount);	// Mana 포션 아이템 클릭시 Mana 증가
 
-	void SetEnemyHp(int32 NewHp);
-	void OnEnemyAttacked(float DamageAmount);
+	void SetEnemyHp(int32 NewHp);		// 적 HP 델레게이트 호출
+	void OnEnemyAttacked(float DamageAmount);	// 적이 공격 받을 때 HP 감소
 
-	int32 GetEnemyHp() { return EnemyHp; }
+	//int32 GetEnemyHp() { return EnemyHp; }
 	float GetEnemyHpRatio() { return EnemyHp / (float)EnemyMaxHp; }
 
 	void SetHp(int32 NewHp);
-	int32 GetHp() { return Hp; }
-	int32 GetMaxHp() { return MaxHp; }
 	float GetHpRatio() { return Hp / (float)MaxHp; }
 
 	void SetMana(int32 NewMana);
 	int32 GetMana() { return Mana; }
-	int32 GetMaxMana() { return MaxMana; }
 	float GetManaRatio() { return Mana / (float)MaxMana; }
 
 	int32 GetAttack() { return Attack; }
@@ -60,8 +56,6 @@ public:
 	int32 GetEnemyAttack() { return EnemyAttack; }
 
 	void SetExp(int32 NewExp);
-	int32 GetExp() { return Exp; }
-
 
 
 private:
@@ -96,7 +90,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = Stat, Meta = (AllowPrivateAccess = true))
 	int32 Exp;
 
-private:
 	UPROPERTY(EditAnywhere, Category = Stat, Meta = (AllowPrivateAccess = true))
 	int32 EnemyHp;
 
@@ -111,17 +104,16 @@ public:
 	UPROPERTY(EditAnywhere, Meta = (AllowPrivateAccess = true))
 	class UMyGameInstance* MyGameInstance;
 
-	FOnHpChanged OnHpChanged;
-
-	FOnManaChanged OnManaChanged;
-
-	FOnPlayerLevelUp OnPlayerLevelUp;
-
 	UPROPERTY(EditAnywhere)
 	int32 NowHp;
 
 	UPROPERTY(EditAnywhere)
 	int32 NowExp;
 
+	FOnHpChanged OnHpChanged;
+
+	FOnManaChanged OnManaChanged;
+
+	FOnPlayerLevelUp OnPlayerLevelUp;
 		
 };

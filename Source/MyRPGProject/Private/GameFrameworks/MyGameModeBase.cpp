@@ -25,13 +25,16 @@ AMyGameModeBase::AMyGameModeBase()
 	UWorld* World = GetWorld();
 	if (World)
 	{
-		GameInstanceRef = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(World));
-		if (GameInstanceRef)
+		MyGameInstanceRef = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(World));
+		if (MyGameInstanceRef)
 		{
-			NowIndex = GameInstanceRef->GetCharacterTypeIndex();
-			CharMeshIndex = GameInstanceRef->GetCharacterMeshIndex();
+			// GameInstance를 통해 선택한 캐릭터 타입과 Mesh 인덱스를 가져옵니다. 
+			CharTypeIndex = MyGameInstanceRef->GetCharacterTypeIndex();
+			CharMeshIndex = MyGameInstanceRef->GetCharacterMeshIndex();
 
-			if (NowIndex == ECharacterIndex::Greystone)
+			// 캐릭터의 컴포넌트 설정을 시각적으로 보기 확인하기 위해 C++기반으로 만들고 블루프린트가 상속받도록 만들었습니다. 
+			// 캐릭터가 Greystone
+			if (CharTypeIndex == ECharacterIndex::Greystone)
 			{
 				static ConstructorHelpers::FClassFinder<ACharacter_Greystone> BP_Greystone1(TEXT("Blueprint'/Game/MainCharacter/Greystone/BP_Greystone.BP_Greystone_C'"));
 				static ConstructorHelpers::FClassFinder<ACharacter_Greystone> BP_Greystone2(TEXT("Blueprint'/Game/MainCharacter/Greystone/BP_Greystone2.BP_Greystone2_C'"));
@@ -41,13 +44,14 @@ AMyGameModeBase::AMyGameModeBase()
 					DefaultPawnClass = BP_Greystone1.Class;
 
 				else if (BP_Greystone2.Succeeded() && CharMeshIndex == 1)
-					DefaultPawnClass = BP_Greystone2.Class; //BP_Greystone1.Class;
+					DefaultPawnClass = BP_Greystone2.Class;
 
 				else if (BP_Greystone3.Succeeded() && CharMeshIndex == 2)
 					DefaultPawnClass = BP_Greystone3.Class; //BP_Greystone1.Class;
 			}
 
-			else if (NowIndex == ECharacterIndex::Countess)
+			// 캐릭터가 Countess
+			else if (CharTypeIndex == ECharacterIndex::Countess)
 			{
 				static ConstructorHelpers::FClassFinder<ACharacter_Countess> BP_Countess1(TEXT("Blueprint'/Game/MainCharacter/Countess/BP_Countess.BP_Countess_C'"));
 				static ConstructorHelpers::FClassFinder<ACharacter_Countess> BP_Countess2(TEXT("Blueprint'/Game/MainCharacter/Countess/BP_Countess2.BP_Countess2_C'"));
@@ -65,9 +69,6 @@ AMyGameModeBase::AMyGameModeBase()
 			}
 		}
 	}
-
-	bUseSeamlessTravel = true;
-	
 }
 
 void AMyGameModeBase::PostLogin(APlayerController* NewPlayer)
@@ -102,15 +103,6 @@ void AMyGameModeBase::EndGame(bool bIsPlayerWinner)
 	{
 		bool bIsWinner = Controller->IsPlayerController() == bIsPlayerWinner;
 		Controller->GameHasEnded(Controller->GetPawn(), bIsWinner);
+		// 해당 Controller를 소유하는 Pawn의 승패 여부 전달하기 
 	}
 }
-
-//for (AController* Controller : TActorRange<AController>(GetWorld()))
-//{
-//	bool bIsWinner = Controller->IsPlayerController() == bIsPlayerWinner;
-//	Controller->GameHasEnded(Controller->GetPawn(), bIsWinner);
-//}
-
-// bIsWinner가 true인 경우
-// AI 컨트롤러이고 && AI가 이겼을 때
-// 플레이어 컨트롤러이고 && 플레이어가 이겼을 때

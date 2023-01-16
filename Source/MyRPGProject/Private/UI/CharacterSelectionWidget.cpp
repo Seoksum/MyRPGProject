@@ -16,15 +16,14 @@ void UCharacterSelectionWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	SelectorActor = Cast<ACharacterSelection>(UGameplayStatics::GetActorOfClass(this, CurrentCharSelect));
-
+	NowCharacterType = 0;
 }
 
 void UCharacterSelectionWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	UWorld* World = GetWorld();
-	if (World)
+	if (GetWorld())
 	{
 		MyGameInstanceRef = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	}
@@ -39,19 +38,18 @@ void UCharacterSelectionWidget::NativeOnInitialized()
 
 	NextBtn->OnClicked.AddDynamic(this, &UCharacterSelectionWidget::NextButtonPressed);
 	BeforeBtn->OnClicked.AddDynamic(this, &UCharacterSelectionWidget::BeforeButtonPressed);
-
 }
 
 void UCharacterSelectionWidget::GreystonePressed()
 {
 	SelectorActor->SelectCharacter(ECharacterIndex::Greystone);
-	NowCharacterIndex = ECharacterIndex::Greystone;
+	NowCharacterType = ECharacterIndex::Greystone;
 }
 
 void UCharacterSelectionWidget::CountessPressed()
 {
 	SelectorActor->SelectCharacter(ECharacterIndex::Countess);
-	NowCharacterIndex = ECharacterIndex::Countess;
+	NowCharacterType = ECharacterIndex::Countess;
 }
 
 void UCharacterSelectionWidget::SelectPressed()
@@ -66,21 +64,22 @@ void UCharacterSelectionWidget::SelectPressed()
 		{
 			PlayerController->HideCharacterMenu();
 		}
-		MyGameInstanceRef->SetCharacterTypeIndex(NowCharacterIndex);
-		MyGameInstanceRef->SetCharacterMeshIndex(SelectorActor->CharacterMeshIdx);
-
+		if (MyGameInstanceRef)
+		{
+			MyGameInstanceRef->SetCharacterTypeIndex(NowCharacterType); // 캐릭터 타입 선택 
+			MyGameInstanceRef->SetCharacterMeshIndex(SelectorActor->CharacterMeshIdx); // 캐릭터 SkeletalMesh 선택  
+		}
 		UGameplayStatics::OpenLevel(GetWorld(), FName("ZeroMap"),true);
-
 	}
 }
 
 void UCharacterSelectionWidget::NextButtonPressed()
 {
-	SelectorActor->NextOrBefore(NowCharacterIndex, true);
+	SelectorActor->NextOrBefore(NowCharacterType, true);
 }
 
 void UCharacterSelectionWidget::BeforeButtonPressed()
 {
-	SelectorActor->NextOrBefore(NowCharacterIndex, false);
+	SelectorActor->NextOrBefore(NowCharacterType, false);
 }
 

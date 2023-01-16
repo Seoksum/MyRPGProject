@@ -19,7 +19,7 @@ APortalToMap::APortalToMap()
 
 	SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionComp"));
 	SphereComp->SetupAttachment(MeshComp);
-	SphereComp->SetSphereRadius(100.f);
+	SphereComp->SetSphereRadius(80.f);
 	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &APortalToMap::OnBeginOverlap);
 
 }
@@ -27,29 +27,30 @@ APortalToMap::APortalToMap()
 void APortalToMap::OnBeginOverlap(UPrimitiveComponent* OverlappedcComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	FLatentActionInfo LatentInfo;
-	TArray<AActor*> PlayerStarts;
+	TArray<AActor*> PlayerStarts; // PlayerStart의 태그를 이용해서 찾기 
 	FVector PlayerStartLocation;
 	ACharacter_Parent* Player = Cast<ACharacter_Parent>(OtherActor);
 	if (Player == nullptr)
+	{
 		return;
-
+	}
 
 	if (PortalTo == "FirstMap")
 	{
 		UGameplayStatics::LoadStreamLevel(GetWorld(), FName("FirstMap"), true, true, LatentInfo);
-		UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("PlayerStart_FirstMap"), PlayerStarts);
+		UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("PS_FirstMap"), PlayerStarts); // FirstMap의 PlayerStart
 	}
 
 	else if (PortalTo == "BossMap")
 	{
 		UGameplayStatics::LoadStreamLevel(GetWorld(), FName("BossMap"), true, true, LatentInfo);
-		UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("PS_BossMap"), PlayerStarts);
+		UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("PS_BossMap"), PlayerStarts); // BossMap의 PlayerStart
 	}
 
-	for (auto PlayerStart : PlayerStarts)
+	for (auto& PlayerStart : PlayerStarts)
 	{
 		PlayerStartLocation = PlayerStart->GetActorLocation();
-		Player->SetActorLocation(PlayerStartLocation);
+		Player->SetActorLocation(PlayerStartLocation); // 플레이어를 다음 위치로 이동하기 
 	}
 
 	return;

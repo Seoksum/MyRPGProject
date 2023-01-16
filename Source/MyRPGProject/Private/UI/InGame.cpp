@@ -12,58 +12,44 @@
 #include "Characters/Character_Greystone.h"
 
 
-UInGame::UInGame(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
-{
-	//SetGreystone();
-}
-
-void UInGame::NativeOnInitialized()
-{
-
-}
-
 void UInGame::SetGreystone()
 {
 	SetLevel();
 
+	// Greystone의 스킬 썸네일 지정하기
 	const FString Q_Path = "Texture2D'/Game/Images/Greystone_Q.Greystone_Q'";
 	const FString E_Path = "Texture2D'/Game/Images/Greystone_E.Greystone_E'";
 	const FString R_Path = "Texture2D'/Game/Images/Greystone_R.Greystone_R'";
-	const FString CharacterThumbnail = "Texture2D'/Game/Images/Greystone_Image.Greystone_Image'";
-
-	UTexture2D* MyTexture_Q = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, *Q_Path));
-	UTexture2D* MyTexture_E = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, *E_Path));
-	UTexture2D* MyTexture_R = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, *R_Path));
-	UTexture2D* MyImage = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, *CharacterThumbnail));
-
-	Image_Q->SetBrushFromTexture(MyTexture_Q);
-	Image_E->SetBrushFromTexture(MyTexture_E);
-	Image_R->SetBrushFromTexture(MyTexture_R);
-
+	
+	SetCharacterSkillThumbnail(Q_Path, E_Path, R_Path);
 }
 
 void UInGame::SetCountess()
 {
 	SetLevel();
 
+	// Countess의 스킬 썸네일 지정하기
 	const FString Q_Path = "Texture2D'/Game/Images/Countess_Q.Countess_Q'";
 	const FString E_Path = "Texture2D'/Game/Images/Countess_E.Countess_E'";
 	const FString R_Path = "Texture2D'/Game/Images/Countess_R.Countess_R'";
-	const FString CharacterThumbnail = "Texture2D'/Game/Images/Countess_Image.Countess_Image'";
+	
+	SetCharacterSkillThumbnail(Q_Path, E_Path, R_Path);
+}
 
+void UInGame::SetCharacterSkillThumbnail(FString Q_Path, FString E_Path, FString R_Path)
+{
 	UTexture2D* MyTexture_Q = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, *Q_Path));
 	UTexture2D* MyTexture_E = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, *E_Path));
 	UTexture2D* MyTexture_R = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, *R_Path));
-	UTexture2D* MyImage = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, *CharacterThumbnail));
 
 	Image_Q->SetBrushFromTexture(MyTexture_Q);
 	Image_E->SetBrushFromTexture(MyTexture_E);
 	Image_R->SetBrushFromTexture(MyTexture_R);
-
 }
 
 void UInGame::SetLevel()
 {
+	// 현재 레벨을 우측 상단에 표시 
 	MyGameInstanceRef = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (MyGameInstanceRef)
 	{

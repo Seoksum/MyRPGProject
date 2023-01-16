@@ -4,13 +4,13 @@
 #include "UI/HPWidget.h"
 #include "Components/ProgressBar.h"
 #include "Components/MyStatComponent.h"
-#include "GameFrameworks/MyGameInstance.h"
 
 
 void UHPWidget::BindHp(class UMyStatComponent* StatComp)
 {
 	CurrentStatComp = StatComp;
 	CurrentStatComp->OnHpChanged.AddUObject(this, &UHPWidget::UpdateHp);
+	// 플레이어의 HP 변화시 ProgressBar에 업데이트 해주어야 함.
 }
 
 void UHPWidget::UpdateHp()
@@ -23,6 +23,7 @@ void UHPWidget::BindMana(class UMyStatComponent* StatComp)
 {
 	CurrentStatComp = StatComp;
 	CurrentStatComp->OnManaChanged.AddUObject(this, &UHPWidget::UpdateMana);
+	// 플레이어의 Mana 변화시 ProgressBar에 업데이트 해주어야 함.
 }
 
 void UHPWidget::UpdateMana()

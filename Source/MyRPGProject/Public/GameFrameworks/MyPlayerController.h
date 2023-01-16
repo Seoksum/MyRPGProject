@@ -27,15 +27,14 @@ public:
 
 	enum EHUDState : uint8
 	{
-		HS_Ingame,
-		HS_Inventory,
-		HS_Weapon,
-		HS_Restart,
+		HS_Ingame,		// 인게임 UI(Q,E,R 스킬)
+		HS_Inventory,	// 인벤토리 UI
+		HS_Weapon,		// 무기 UI
+		HS_Restart,		// 재시작 UI
 	};
-	void ApplyHUDChanges();	//hud state를 체크하고,우리가 원하는 hud state로 적용(바꾸기)하기위한 함수
-	uint8 GetHUDState(); // hudstate 받아오는 함수
+	void ApplyHUDChanges();	// 원하는 HUD로 적용(바꾸기)하기위한 함수
+	uint8 GetHUDState();
 
-	UFUNCTION(BlueprintCallable, Category = "HUD Functions")
 	void ChangeHUDState(uint8 NewState); // 새로운 hudstate를 받아온 후 applyHUDChanges 호출
 
 	bool ApplyHUD(TSubclassOf<class UUserWidget> WidgetToApply, bool bShowMouseCursor, bool EnableClickEvents); // screen에 hud를 적용한 후 성공여부 반환
@@ -45,13 +44,10 @@ public:
 	void AddCrossWidget();
 	void RemoveCrossWidget();
 
-public:
+private:
 
 	UPROPERTY()
-	UUserWidget* CurrentWidget;
-
-	UPROPERTY()
-		UUserWidget* InventoryWidget;
+	UUserWidget* InventoryWidget;
 
 	UPROPERTY()
 	UUserWidget* RestartWidget;
@@ -63,10 +59,14 @@ public:
 	UUserWidget* CrosshairWidget;
 
 	UPROPERTY()
-		UUserWidget* WinnerWidget;
+	UUserWidget* WinnerWidget;
 
 
+public:
 	uint8 HUDState;
+
+	UPROPERTY()
+	UUserWidget* CurrentWidget;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HUDWidgets", Meta = (BlueprintProtected = true))
 	TSubclassOf<UUserWidget> IngameHUDClass;
@@ -84,12 +84,12 @@ public:
 	TSubclassOf<UUserWidget> CrosshairClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HUDWidgets", Meta = (BlueprintProtected = true))
-		TSubclassOf<UUserWidget> WinnerClass;
+	TSubclassOf<UUserWidget> WinnerClass;
 
 
 	UPROPERTY(VisibleAnywhere)
 	class UMyGameInstance* MyGameInstanceRef;
 
-	bool bOnInventoryHUD;
-	bool bOnWeaponHUD;
+	bool bOnInventoryHUD;	// 탭키를 사용해 인벤토리 창 켜기/끄기 둘 다 가능
+	bool bOnWeaponHUD;		// o키를 사용해 무기 창 켜기/끄기 둘 다 가능
 };

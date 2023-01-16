@@ -23,48 +23,46 @@ protected:
 	virtual void GreystonePressed();
 
 	UFUNCTION()
-		virtual void CountessPressed();
+	virtual void CountessPressed();
 
 	UFUNCTION()
-		virtual void SelectPressed();
+	virtual void SelectPressed();
 
 	UFUNCTION()
-		virtual void NextButtonPressed();
+	virtual void NextButtonPressed();
 
 	UFUNCTION()
-		virtual void BeforeButtonPressed();
+	virtual void BeforeButtonPressed();
 
 
 private:
 	UPROPERTY(meta = (BindWidget))
-		class UButton* Btn_Greystone;
+	class UButton* Btn_Greystone;
 
 	UPROPERTY(meta = (BindWidget))
-		class UButton* Btn_Countess;
+	class UButton* Btn_Countess;
 
 	UPROPERTY(meta = (BindWidget))
-		class UButton* Btn_SelectCharacter;
+	class UButton* Btn_SelectCharacter;
 
 	UPROPERTY(meta = (BindWidget))
-		class UButton* NextBtn;
+	class UButton* NextBtn;
 
 	UPROPERTY(meta = (BindWidget))
-		class UButton* BeforeBtn;
+	class UButton* BeforeBtn;
 
-	UPROPERTY()
-		int32 ButtonIndex;
+	UPROPERTY(VisibleAnywhere)
+	class UMyGameInstance* MyGameInstanceRef;
 
 public:
 
 	UPROPERTY(EditDefaultsOnly)
-		TSubclassOf<class ACharacterSelection> CurrentCharSelect;
+	TSubclassOf<class ACharacterSelection> CurrentCharSelect;
 
 	UPROPERTY(EditDefaultsOnly)
-		class ACharacterSelection* SelectorActor;
+	class ACharacterSelection* SelectorActor;
 
-	UPROPERTY()
-		int32 NowCharacterIndex = 0;
+	UPROPERTY(EditDefaultsOnly)
+	int32 NowCharacterType;
 
-	UPROPERTY(VisibleAnywhere)
-		class UMyGameInstance* MyGameInstanceRef;
 };

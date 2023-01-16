@@ -11,65 +11,60 @@
 
 void UWeaponWidget::NativeOnInitialized()
 {
+	Super::NativeOnInitialized();
+
+	Player = Cast<ACharacter_Parent>(GetOwningPlayerPawn());
+	PC = Cast<AMyPlayerController>(Player->GetController());
+
 	Button_Sword->OnClicked.AddDynamic(this, &UWeaponWidget::PressedSword);
 	Button_Gun->OnClicked.AddDynamic(this, &UWeaponWidget::PressedGun);
 	Button_Bow->OnClicked.AddDynamic(this, &UWeaponWidget::PressedBow);
-
 }
 
 void UWeaponWidget::PressedSword()
 {
-	ACharacter_Parent* Player = Cast<ACharacter_Parent>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	AMyPlayerController* PC = Cast<AMyPlayerController>(Player->GetController());
-
 	if (Player && PC)
 	{
 		if (Player->CurrentWeaponIndex == EWeapon::Sword)
 			return;
 		Player->SwitchWeapon(EWeapon::Sword);
-		
-		if (bZoomMode)
+
+		if (bIsNowCrossHairMode)
 		{
-			PC->RemoveCrossWidget();
-			bZoomMode = false;
+			PC->RemoveCrossWidget(); // 십자선이 있다면 제거하기 
+			bIsNowCrossHairMode = false;
 		}
 	}
 }
 
 void UWeaponWidget::PressedGun()
 {
-	ACharacter_Parent* Player = Cast<ACharacter_Parent>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	AMyPlayerController* PC = Cast<AMyPlayerController>(Player->GetController());
-
 	if (Player && PC)
 	{
 		if (Player->CurrentWeaponIndex == EWeapon::Gun)
 			return;
 		Player->SwitchWeapon(EWeapon::Gun);
 
-		if (!bZoomMode)
+		if (!bIsNowCrossHairMode)
 		{
-			PC->AddCrossWidget();
-			bZoomMode = true;
+			PC->AddCrossWidget(); // 십자선이 없다면 추가하기 
+			bIsNowCrossHairMode = true;
 		}
 	}
 }
 
 void UWeaponWidget::PressedBow()
 {
-	ACharacter_Parent* Player = Cast<ACharacter_Parent>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	AMyPlayerController* PC = Cast<AMyPlayerController>(Player->GetController());
-
 	if (Player && PC)
 	{
 		if (Player->CurrentWeaponIndex == EWeapon::Bow)
 			return;
 		Player->SwitchWeapon(EWeapon::Bow);
 
-		if (!bZoomMode)
+		if (!bIsNowCrossHairMode)
 		{
-			PC->AddCrossWidget();
-			bZoomMode = true;
+			PC->AddCrossWidget(); // 십자선이 없다면 추가하기 
+			bIsNowCrossHairMode = true;
 		}
 	}
 }

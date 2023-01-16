@@ -26,7 +26,12 @@ protected:
 	UFUNCTION()
 	virtual void PressedBow();
 
-	bool bZoomMode;
+	bool bIsNowCrossHairMode; // Arrow or Gun 무기일 때 
+
+	class ACharacter_Parent* Player;
+
+	class AMyPlayerController* PC;
+
 
 public:
 	UPROPERTY(meta = (BindWidget))

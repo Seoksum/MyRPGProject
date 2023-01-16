@@ -24,7 +24,7 @@ void UMyStatComponent::InitializeComponent()
 
 void UMyStatComponent::SetEnemyLevel(int32 NewLevel)
 {
-	//MyGameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	MyGameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (MyGameInstance)
 	{
 		auto StatData = MyGameInstance->GetStatData(NewLevel);
@@ -40,7 +40,7 @@ void UMyStatComponent::SetEnemyLevel(int32 NewLevel)
 
 void UMyStatComponent::SetPlayerLevel(int32 NewLevel)
 {
-	//MyGameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	MyGameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	bool IsRestarting = MyGameInstance->IsRestarting;
 	Level = NewLevel;
 
@@ -75,13 +75,10 @@ void UMyStatComponent::SetPlayerLevel(int32 NewLevel)
 			Attack_Q = StatData->Attack_Q;
 			Attack_E = StatData->Attack_E;
 			Attack_R = StatData->Attack_R;
-
-			OnHpChanged.Broadcast();
-			OnManaChanged.Broadcast();
-
 		}
 	}
 }
+
 
 void UMyStatComponent::SetHp(int32 NewHp)
 {
@@ -102,12 +99,8 @@ void UMyStatComponent::SetHp(int32 NewHp)
 void UMyStatComponent::SetMana(int32 NewMana)
 {
 	Mana = NewMana;
-	MyGameInstance->SetNowMana(NewMana);
-
-	if (Mana < 0)
-	{
-		Mana = 0;
-	}
+	if (Mana < 0) { Mana = 0; }
+	MyGameInstance->SetNowMana(Mana);
 	OnManaChanged.Broadcast();
 }
 
@@ -115,12 +108,12 @@ void UMyStatComponent::SetExp(int32 NewExp)
 {
 	Exp += NewExp;
 	auto StatData = MyGameInstance->GetStatData(Level);
-	int32 LevelExp = StatData->Exp;
+	int32 LevelExp = StatData->Exp; // 레벨업을 위해 얻어야하는 경험치 값
 
-	if (LevelExp <= Exp)
+	if (LevelExp <= Exp) // 레벨 경험치를 넘기면
 	{
-		OnPlayerLevelUp.Broadcast();
-		Exp -= LevelExp;
+		OnPlayerLevelUp.Broadcast(); // 레벨업 시켜주는 델레게이트 
+		Exp -= LevelExp; // 남은 경험치는 이월 
 	}
 }
 
@@ -132,11 +125,6 @@ void UMyStatComponent::OnAttacked(float DamageAmount)
 
 void UMyStatComponent::OnAttacking(float ManaAmount)
 {
-	if (Mana < 0)
-	{
-		Mana = 0;
-		return;
-	}
 	int32 NewMana = Mana -= ManaAmount;
 	SetMana(NewMana);
 }
@@ -150,6 +138,8 @@ void UMyStatComponent::UseHpPotion(float Amount)
 void UMyStatComponent::UseManaPotion(float Amount)
 {
 	int NewMana = Mana += Amount;
+	if (NewMana >= MaxMana)
+		NewMana = MaxMana;
 	SetMana(NewMana);
 }
 
@@ -160,7 +150,6 @@ void UMyStatComponent::SetEnemyHp(int32 NewHp)
 	if (EnemyHp <= 0)
 	{
 		EnemyHp = 0;
-
 		if (GetOwner()->Implements<UHealthInterface>())
 		{
 			IHealthInterface::Execute_OnDeath(GetOwner());

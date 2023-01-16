@@ -24,15 +24,17 @@ public:
 	void AddItem(class AItem* Item);	// 인벤토리에 아이템 추가
 	void RemoveItem(class AItem* Item);	// 인벤토리에 아이템 제거
 
-	// 최대 용량
-	UPROPERTY(EditDefaultsOnly, Category = "Inventory")
-	int32 Capacity;
-
-	// 아이템 배열
-	UPROPERTY(VisibleAnywhere, Category = "Items")
-	TArray<class AItem*> Items;
+	TArray<class AItem*> GetItems();
 
 	// 인벤토리에 아이템UI 변경 
 	FOnInventoryUpdated OnInventoryUpdated;
 
+private:
+	// 최대 용량
+	UPROPERTY(EditDefaultsOnly, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
+		int32 Capacity;
+
+	// 아이템 배열
+	UPROPERTY(VisibleAnywhere, Category = "Items")
+		TArray<class AItem*> Items;
 };

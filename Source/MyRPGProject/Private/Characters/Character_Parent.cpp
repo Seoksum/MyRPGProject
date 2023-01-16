@@ -457,56 +457,62 @@ void ACharacter_Parent::UseItem(class AItem* Item)
 
 void ACharacter_Parent::SelectWeapon()
 {
-	if (MyPlayerController->bOnWeaponHUD)
+	// o키를 누르면 무기 창을 보여줍니다. 
+	if (MyPlayerController->bOnWeaponHUD) // 이미 무기 창이 화면에 존재한다면 
 	{
 		MyPlayerController->RemoveHUD(MyPlayerController->HS_Weapon);
+		// 무기 창 제거해줍니다.
 	}
 	else
 	{
 		MyPlayerController->ChangeHUDState(MyPlayerController->HS_Weapon);
+		// 무기 창이 존재하지 않았다면 추가해줍니다. 
 	}
 }
 
 void ACharacter_Parent::SelectInventory()
 {
-	if (MyPlayerController->bOnInventoryHUD)
+	// 탭키를 누르면 인벤토리 창을 보여줍니다. 
+	if (MyPlayerController->bOnInventoryHUD) // 이미 인벤토리 창이 화면에 존재한다면 
 	{
 		MyPlayerController->RemoveHUD(MyPlayerController->HS_Inventory);
+		// 인벤토리 창을 제거해줍니다. 
 	}
 	else
 	{
 		MyPlayerController->ChangeHUDState(MyPlayerController->HS_Inventory);
+		// 인벤토리 창이 존재하지 않았다면 추가해줍니다. 
 	}
 
 }
 
 void ACharacter_Parent::SwitchWeapon(int32 Index)
 {
-	CurrentWeapon->SetActorHiddenInGame(true);
-	CurrentWeaponIndex = Index;
+	CurrentWeapon->SetActorHiddenInGame(true);	// 현재 무기를 숨기고
+	CurrentWeaponIndex = Index;					// 무기 인덱스를 바꿔줍니다. 
 	SpringArm->TargetArmLength = 450.f;
 
-	if (Index == EWeapon::Sword)
+	if (CurrentWeaponIndex == EWeapon::Sword)
 	{
-		CurrentWeapon = Sword;
+		CurrentWeapon = Sword; 
 		SpringArm->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 		SpringArm->SocketOffset = FVector(0.f, 0.f, 0.f);
 	}
-	else if (Index == EWeapon::Gun)
+	else if (CurrentWeaponIndex == EWeapon::Gun)
 	{
 		CurrentWeapon = Gun;
 		SpringArm->SetRelativeLocation(FVector(0.f, 40.f, 70.f));
 		SpringArm->SocketOffset = FVector(0.f, 60.f, 0.f);
 	}
-	else if (Index == EWeapon::Bow)
+	else if (CurrentWeaponIndex == EWeapon::Bow)
 	{
 		CurrentWeapon = Bow;
 		SpringArm->SetRelativeLocation(FVector(0.f, 40.f, 70.f));
 		SpringArm->SocketOffset = FVector(0.f, 60.f, 0.f);
 	}
 
-	Camera->SetFieldOfView(DefaultFOV);
-	CurrentWeapon->SetActorHiddenInGame(false);
+	Camera->SetFieldOfView(DefaultFOV); // 카메라는 시야를 처음 값으로 설정합니다. 
+	CurrentWeapon->SetActorHiddenInGame(false); // 무기를 보여줍니다. 
 }
 
 void ACharacter_Parent::PressClimbingUp()
@@ -514,48 +520,51 @@ void ACharacter_Parent::PressClimbingUp()
 	if (bIsClimbingUp)
 		return;
 
-	FVector Start = GetCapsuleComponent()->GetRelativeLocation();
-	FVector End = GetCapsuleComponent()->GetRelativeLocation() + GetCapsuleComponent()->GetForwardVector() * 300.f;
+	FVector Start = GetCapsuleComponent()->GetRelativeLocation(); // 현재 캡슐콜리전의 위치
+	FVector End = GetCapsuleComponent()->GetRelativeLocation() + GetCapsuleComponent()->GetForwardVector() * 300.f; // 현재 위치에서 300.f 앞
 
 	float CapsuleHalfHeight = GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
-	float CapsuleHeight = CapsuleHalfHeight * 2.f;
+	float CapsuleHeight = CapsuleHalfHeight * 2.f; // 캡슐의 높이를 구합니다. 
 
-	float diff = 150.f;
+	float diff = 150.f; 
 	Start.Z += CapsuleHeight + diff;
-	End.Z += CapsuleHeight + diff;
+	End.Z += CapsuleHeight + diff; 
+	// 시작점과 끝점 모두 Z축으로 diff 만큼 더해줍니다. 
+	// 캐릭터의 캡슐콜리전 높이가 캐릭터의 머리 끝까지 도달하지 않았으므로 z축으로 diff만큼 더해주었습니다.
 
 	FHitResult OutHit;
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(this);
 	bool bResult = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECollisionChannel::ECC_GameTraceChannel6, QueryParams);
-	//auto Wall = Cast<AClimbingWall>(OutHit.Actor);
+	// Wall 트레이스 채널을 수행하였습니다. 
+	// Wall 트레이스 채널에 Block반응이 일어나는 벽은 등반할 수 있습니다. 
 
-	if (bResult)
+	if (bResult) // 충돌 반응이 발생했다면 
 	{
-		bIsOnWall = true;
-		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
-		bIsClimbingUp = true;
+		bIsOnWall = true; // 벽에 매달린 상태인 bIsOnWall를 true로 설정합니다.
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying); // 캐릭터가 위로 향해야 하므로 MOVE_Flying 모드로 바꿔줍니다.
+		bIsClimbingUp = true; // 등반할 수 있도록 하기위해 bIsClimbingUp을 true로 설정합니다. 
 	}
 
-	else
+	else // 충돌 반응이 발생하지 않았을 때
 	{
-		if (bIsOnWall)
+		if (bIsOnWall) // 벽에 매달려있는 상태라면
 		{
-			GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
-			bIsOnWall = false;
-			bIsClimbingComplete = true;
+			GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking); // 다시 MOVE_Walking 모드로 바꾸고
+			bIsOnWall = false; // 더 이상 벽에 매달린 상태가 아니고
+			bIsClimbingComplete = true; // 등반이 끝났음을 알리는 bIsClimbingComplete를 true로 설정합니다. 
 		}
-		else { return; }
+		else { return; } 
 	}
 
 	GetWorld()->GetTimerManager().SetTimer(ClimbingHandle, this, &ACharacter_Parent::ReleaseClimbingUp, 1.5f, true);
+	// 등반 애니메이션이 완료되기까지 기다리기 위해 1.5초 후 ReleaseClimbingUp 함수를 호출합니다. 
 }
 
 void ACharacter_Parent::ReleaseClimbingUp()
 {
-	bIsClimbingUp = false;
-	GetWorld()->GetTimerManager().ClearTimer(ClimbingHandle);
-	bIsClimbingComplete = false;
+	bIsClimbingUp = false; // 한 번 등반이 완료된 후 bIsClimbingUp은 false가 됩니다. 
+	GetWorld()->GetTimerManager().ClearTimer(ClimbingHandle); 
 }
 
 void ACharacter_Parent::CameraShakeCheck()

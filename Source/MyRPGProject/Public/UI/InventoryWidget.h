@@ -22,23 +22,21 @@ protected:
 	UFUNCTION()
 	void RefreshInventory();
 
-	void InitializeInventory(class UInventoryComponent* InventoryComponent);
-
 	UFUNCTION()
 	virtual void OnClickedCloseButton();
 
 
 public:
 	UPROPERTY(BlueprintReadOnly,meta = (BindWidget))
-		class UButton* CloseButton;
+	class UButton* CloseButton;
 
 	UPROPERTY(BlueprintReadOnly,meta = (BindWidget))
-		class UWrapBox* InventoryBox;
+	class UWrapBox* InventoryBox;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
-		class UInventoryComponent* Inventory;
+	class UInventoryComponent* Inventory;
 
 	UPROPERTY(BlueprintReadWrite, Category = "HUDWidgets", Meta = (BlueprintProtected = true))
-		TSubclassOf<class UItemWidget> ItemHUDClass;
+	TSubclassOf<class UItemWidget> ItemHUDClass;
 	
 };

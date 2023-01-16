@@ -61,7 +61,7 @@ void AEnemy_Thrower::Attack()
 {
 	Super::Attack();
 
-	if (IsAttacking || Stat->GetEnemyHp() <= 0.f)
+	if (IsAttacking)
 		return;
 
 	AnimInstance->PlayAttackMontage_Thrower();

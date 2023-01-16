@@ -28,11 +28,9 @@ private:
 	void EndGame(bool bIsPlayerWinner);
 
 
-
-
 public:
 	UPROPERTY(VisibleAnywhere)
-	class UMyGameInstance* GameInstanceRef;
+	class UMyGameInstance* MyGameInstanceRef;
 
 	UPROPERTY()
 	TSubclassOf<UUserWidget> HUD_Class;
@@ -41,12 +39,10 @@ public:
 	UUserWidget* CurrentWidget;
 
 	UPROPERTY(VisibleAnywhere)
-	int32 NowIndex;
+	int32 CharTypeIndex;
 
 	UPROPERTY(VisibleAnywhere)
 	int32 CharMeshIndex;
 
-	UPROPERTY(VisibleAnywhere)
-	int32 MaterialIndex = 0;
 
 };

@@ -23,9 +23,7 @@ public:
 
 private:
 	TWeakObjectPtr<class UMyStatComponent> CurrentStatComp;
-
-
-	TWeakObjectPtr<class UMyGameInstance> MyGameInstanceRef;
+	// 플레이어 StatComponent를 Weak포인터로 참조하기 
 
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar* PB_HpBar;
