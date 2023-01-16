@@ -15,15 +15,6 @@ UMyStatComponent::UMyStatComponent()
 
 }
 
-// Called when the game starts
-void UMyStatComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
-
-}
-
 void UMyStatComponent::InitializeComponent()
 {
 	Super::InitializeComponent();
@@ -31,16 +22,15 @@ void UMyStatComponent::InitializeComponent()
 	MyGameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
 
-void UMyStatComponent::SetLevel(int32 NewLevel)
+void UMyStatComponent::SetEnemyLevel(int32 NewLevel)
 {
-	MyGameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	//MyGameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (MyGameInstance)
 	{
 		auto StatData = MyGameInstance->GetStatData(NewLevel);
-
 		if (StatData)
 		{
-			Level = StatData->Level;
+			Level = NewLevel;
 			SetEnemyHp(StatData->MaxHp);
 			EnemyMaxHp = StatData->MaxHp;
 			EnemyAttack = StatData->Attack;
@@ -50,7 +40,7 @@ void UMyStatComponent::SetLevel(int32 NewLevel)
 
 void UMyStatComponent::SetPlayerLevel(int32 NewLevel)
 {
-	MyGameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	//MyGameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	bool IsRestarting = MyGameInstance->IsRestarting;
 	Level = NewLevel;
 
@@ -131,7 +121,6 @@ void UMyStatComponent::SetExp(int32 NewExp)
 	{
 		OnPlayerLevelUp.Broadcast();
 		Exp -= LevelExp;
-		UE_LOG(LogTemp, Log, TEXT("Now Exp : %d , BeforeLevelExp : %d"), Exp, LevelExp);
 	}
 }
 

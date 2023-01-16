@@ -3,14 +3,12 @@
 
 #include "Components/InventoryComponent.h"
 #include "Items/Item.h"
-#include "GameFrameworks/MyGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
 {
 	Capacity = 20.f;
-
 
 }
 
@@ -20,10 +18,6 @@ void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	for (auto& Item : DefaultItems)
-	{
-		AddItem(Item);
-	}
 }
 
 void UInventoryComponent::AddItem(AItem* Item)
@@ -33,8 +27,7 @@ void UInventoryComponent::AddItem(AItem* Item)
 	
 	Item->OwingInventory = this;
 	Items.Add(Item);
-	// UI 업데이트
-	OnInventoryUpdated.Broadcast();
+	OnInventoryUpdated.Broadcast(); // UI 업데이트
 }
 
 void UInventoryComponent::RemoveItem(AItem* Item)
@@ -43,7 +36,7 @@ void UInventoryComponent::RemoveItem(AItem* Item)
 	{
 		Item->OwingInventory = nullptr;
 		Items.RemoveSingle(Item);
-		OnInventoryUpdated.Broadcast();
+		OnInventoryUpdated.Broadcast(); // UI 업데이트
 	}
 	return;
 }

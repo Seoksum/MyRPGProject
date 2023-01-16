@@ -11,8 +11,6 @@
 // Sets default values
 ACharacterSelection::ACharacterSelection()
 {
-	MyGameInstanceRef = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-
 	RootScene = CreateDefaultSubobject<USceneComponent>(TEXT("ROOT"));
 	RootComponent = RootScene;
 
@@ -32,6 +30,7 @@ ACharacterSelection::ACharacterSelection()
 
 	Countesses = CreateDefaultSubobject<USceneComponent>(TEXT("Countesses"));
 	Countesses->SetupAttachment(RootComponent);
+
 	Countess1 = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("COUNTESS1"));
 	Countess2 = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("COUNTESS2"));
 	Countess3 = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("COUNTESS3"));
@@ -42,10 +41,8 @@ ACharacterSelection::ACharacterSelection()
 	CountessArray.Add(Countess2);
 	CountessArray.Add(Countess3);
 
-
 }
 
-// Called when the game starts or when spawned
 void ACharacterSelection::BeginPlay()
 {
 	Super::BeginPlay();
@@ -70,45 +67,40 @@ void ACharacterSelection::BeginPlay()
 
 void ACharacterSelection::SelectCharacter(int32 Index)
 {
+	CharacterMeshIdx = 0;
+
 	if (Index == ECharacterIndex::Greystone)
 	{
 		GreyStoneArray[0]->SetVisibility(true);
-		CharacterMeshIdx = 0;
 		HideCountess();
 	}
 	else if (Index == ECharacterIndex::Countess)
 	{
 		CountessArray[0]->SetVisibility(true);
-		CharacterMeshIdx = 0;
 		HideGreystone();
 	}
 }
 
-void ACharacterSelection::NextOrBefore(int32 CharIdx,bool IsNext)
+void ACharacterSelection::NextOrBefore(int32 CharType, bool IsNext)
 {
 	TArray<USkeletalMeshComponent*> temp;
-	if (CharIdx == ECharacterIndex::Greystone)
+
+	if (CharType == ECharacterIndex::Greystone)
 		temp = GreyStoneArray;
-	else if (CharIdx == ECharacterIndex::Countess)
+	else if (CharType == ECharacterIndex::Countess)
 		temp = CountessArray;
 
-	if(IsNext)
-		CharacterMeshIdx = (CharacterMeshIdx + 1) % temp.Num();
-	else
-		CharacterMeshIdx = (CharacterMeshIdx + (CountessArray.Num() - 1)) % CountessArray.Num();
+	temp[CharacterMeshIdx]->SetVisibility(false);
 
-	for (int32 i = 0; i < temp.Num(); i++)
-	{
-		if (i == CharacterMeshIdx)
-			temp[i]->SetVisibility(true);
-		else
-			temp[i]->SetVisibility(false);
-	}
+	if (IsNext) { CharacterMeshIdx = (CharacterMeshIdx + 1) % temp.Num(); }
+	else { CharacterMeshIdx = (CharacterMeshIdx + (CountessArray.Num() - 1)) % CountessArray.Num(); }
+
+	temp[CharacterMeshIdx]->SetVisibility(true);
 }
 
 void ACharacterSelection::HideGreystone()
 {
-	for (auto Greystone : GreyStoneArray)
+	for (auto& Greystone : GreyStoneArray)
 	{
 		Greystone->SetVisibility(false);
 	}
@@ -116,7 +108,7 @@ void ACharacterSelection::HideGreystone()
 
 void ACharacterSelection::HideCountess()
 {
-	for (auto Countess : CountessArray)
+	for (auto& Countess : CountessArray)
 	{
 		Countess->SetVisibility(false);
 	}

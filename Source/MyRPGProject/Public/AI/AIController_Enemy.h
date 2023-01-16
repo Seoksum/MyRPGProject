@@ -25,10 +25,6 @@ public:
 	static const FName PatrolPosKey;
 
 	bool IsDead() const;
-	bool IsBossDead() const;
-
-//private:
-//	void RandomMove();
 
 
 private:

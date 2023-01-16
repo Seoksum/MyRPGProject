@@ -36,7 +36,6 @@ void AAIController_Enemy::OnPossess(APawn* InPawn)
 
 	if (UseBlackboard(BlackboardData, Blackboard))
 	{
-		//AEnemy_BuffRed* Enemy = Cast<AEnemy_BuffRed>(InPawn);
 		AEnemy* Enemy = Cast<AEnemy>(InPawn);
 
 		Blackboard->SetValueAsVector(HomePosKey, InPawn->GetActorLocation());
@@ -54,7 +53,6 @@ void AAIController_Enemy::OnUnPossess()
 {
 	Super::OnUnPossess();
 
-	//GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 }
 
 bool AAIController_Enemy::IsDead() const
@@ -67,15 +65,5 @@ bool AAIController_Enemy::IsDead() const
 		return bIsEnemyDeath && bIsBossDeath;
 	}
 	return true; // AI가 죽으면 폰이 AI 컨트롤러와 분리됨
-}
-
-bool AAIController_Enemy::IsBossDead() const
-{
-	AEnemy* ControlledCharacter = Cast<AEnemy>(GetPawn());
-	if (ControlledCharacter)
-	{
-		return ControlledCharacter->EnemyIndex==EEnemy::BossEnemy && ControlledCharacter->IsDeath;
-	}
-	return true;
 }
 

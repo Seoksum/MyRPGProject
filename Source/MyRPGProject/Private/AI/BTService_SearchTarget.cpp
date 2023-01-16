@@ -18,7 +18,6 @@ void UBTService_SearchTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
 	auto CurrentPawn = OwnerComp.GetAIOwner()->GetPawn();
-
 	if (CurrentPawn == nullptr)
 		return;
 

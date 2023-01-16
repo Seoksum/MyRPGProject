@@ -8,7 +8,6 @@
 
 DECLARE_MULTICAST_DELEGATE(FOnHpChanged);
 DECLARE_MULTICAST_DELEGATE(FOnManaChanged);
-DECLARE_MULTICAST_DELEGATE(FOnDeath);
 DECLARE_MULTICAST_DELEGATE(FOnPlayerLevelUp);
 
 
@@ -22,14 +21,13 @@ public:
 	UMyStatComponent();
 
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+
 	virtual void InitializeComponent() override;
 
 
 public:
 
-	void SetLevel(int32 NewLevel);
+	void SetEnemyLevel(int32 NewLevel);
 	void SetPlayerLevel(int32 NewLevel);
 
 	void OnAttacked(float DamageAmount);
@@ -117,17 +115,13 @@ public:
 
 	FOnManaChanged OnManaChanged;
 
-	FOnDeath OnDeath;
-
 	FOnPlayerLevelUp OnPlayerLevelUp;
 
 	UPROPERTY(EditAnywhere)
 	int32 NowHp;
 
 	UPROPERTY(EditAnywhere)
-		int32 NowExp;
-
-
+	int32 NowExp;
 
 		
 };

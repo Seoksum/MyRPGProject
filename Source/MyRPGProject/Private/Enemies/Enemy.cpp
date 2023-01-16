@@ -31,6 +31,7 @@ AEnemy::AEnemy()
 	AIControllerClass = AAIController_Enemy::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
+	Stat = CreateDefaultSubobject<UMyStatComponent>(TEXT("STAT"));
 	
 	HpBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBAR"));
 	HpBar->SetupAttachment(GetMesh());
@@ -51,12 +52,14 @@ void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	Stat->SetEnemyLevel(Level);
 	Sword = GetWorld()->SpawnActor<AWeapon_Sword>(SwordClass);
 	if (Sword)
 	{
 		Sword->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
 		Sword->SetOwner(this);
 	}
+
 }
 
 // Called every frame

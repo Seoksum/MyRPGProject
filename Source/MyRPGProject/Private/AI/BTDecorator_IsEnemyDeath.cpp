@@ -21,12 +21,8 @@ bool UBTDecorator_IsEnemyDeath::CalculateRawConditionValue(UBehaviorTreeComponen
 		return false;
 
 	auto Enemy = Cast<AEnemy>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Enemy"))));
-	//auto Enemy = Cast<AEnemy_BuffRed>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Enemy"))));
-	
-
-	if (Enemy != nullptr)
+	if (Enemy)
 		return bResult && Enemy->IsDeath;
-
 
 	return false;
 }

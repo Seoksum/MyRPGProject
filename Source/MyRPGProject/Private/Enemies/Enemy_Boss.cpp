@@ -17,11 +17,6 @@
 
 AEnemy_Boss::AEnemy_Boss()
 {
-	Stat = CreateDefaultSubobject<UMyStatComponent>(TEXT("STAT"));
-
-	AIControllerClass = AAIController_Enemy::StaticClass();
-	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-
 	Level = 5;
 	EnemyExp = 100;
 	EnemyIndex = EEnemy::BossEnemy;
@@ -44,7 +39,7 @@ void AEnemy_Boss::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	Stat->SetLevel(Level);
+	//Stat->SetLevel(Level);
 	AnimInstance = Cast<UEnemy_AnimInstance>(GetMesh()->GetAnimInstance());
 
 	if (AnimInstance)

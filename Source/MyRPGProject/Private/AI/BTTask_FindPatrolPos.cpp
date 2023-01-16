@@ -30,19 +30,16 @@ EBTNodeResult::Type UBTTask_FindPatrolPos::ExecuteTask(UBehaviorTreeComponent& O
 	if (CurrentPawn == nullptr)
 		return EBTNodeResult::Failed;
 
-
-	FVector Origin = OwnerComp.GetBlackboardComponent()->GetValueAsVector(AAIController_Enemy::HomePosKey);
-	
+	FVector OriginLocation = OwnerComp.GetBlackboardComponent()->GetValueAsVector(AAIController_Enemy::HomePosKey);
 	FNavLocation RandomLocation;
 
-	if (NavSystem->GetRandomPointInNavigableRadius(Origin, 500.f, RandomLocation))
+	if (NavSystem->GetRandomPointInNavigableRadius(OriginLocation, 500.f, RandomLocation))
 	{
 		//UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, RandomLocation);
 		OwnerComp.GetBlackboardComponent()->SetValueAsVector(AAIController_Enemy::PatrolPosKey, RandomLocation.Location);
 		
 		return EBTNodeResult::Succeeded;
 	}
-
 
 	return EBTNodeResult::Failed;
 }

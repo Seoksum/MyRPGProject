@@ -24,11 +24,6 @@ AEnemy_Corpse::AEnemy_Corpse()
 	}
 	GetMesh()->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
 
-	AIControllerClass = AAIController_Enemy::StaticClass();
-	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-
-	Stat = CreateDefaultSubobject<UMyStatComponent>(TEXT("STAT"));
-
 	Level = 3;
 	EnemyExp = 10;
 	EnemyIndex = EEnemy::SkeletonEnemy;
@@ -44,7 +39,6 @@ void AEnemy_Corpse::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	Stat->SetLevel(Level);
 	AnimInstance = Cast<UEnemy_AnimInstance>(GetMesh()->GetAnimInstance());
 
 	if (AnimInstance)

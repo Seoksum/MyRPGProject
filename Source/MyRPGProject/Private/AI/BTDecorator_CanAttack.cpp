@@ -27,7 +27,7 @@ bool UBTDecorator_CanAttack::CalculateRawConditionValue(UBehaviorTreeComponent& 
 	if (Player->IsDeath)
 		return false;
 	
-	if (Player != nullptr)
+	if (Player)
 		return bResult && Player->GetDistanceTo(CurrentPawn) <= 450.f;
 
 	else

@@ -22,11 +22,6 @@ AEnemy_Thrower::AEnemy_Thrower()
 		GetMesh()->SetSkeletalMesh(SM.Object);
 	}
 
-	AIControllerClass = AAIController_Enemy::StaticClass();
-	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-
-	Stat = CreateDefaultSubobject<UMyStatComponent>(TEXT("STAT"));
-
 	Level = 1;
 	EnemyExp = 10;
 	EnemyIndex = EEnemy::SkeletonEnemy;
@@ -43,14 +38,12 @@ void AEnemy_Thrower::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	Stat->SetLevel(Level);
 	AnimInstance = Cast<UEnemy_AnimInstance>(GetMesh()->GetAnimInstance());
 
 	if (AnimInstance)
 	{
 		AnimInstance->OnMontageEnded.AddDynamic(this, &AEnemy_Thrower::OnAttackMontageEnded);
 		AnimInstance->OnThrowProjectile.AddUObject(this, &AEnemy_Thrower::ThrowProjectile);
-
 	}
 
 	HpBar->InitWidget();

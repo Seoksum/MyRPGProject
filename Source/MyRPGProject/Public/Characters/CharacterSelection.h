@@ -23,7 +23,7 @@ public:
 
 	void SelectCharacter(int32 Index);
 
-	void NextOrBefore(int32 CharIdx, bool IsNext);
+	void NextOrBefore(int32 CharType, bool IsNext);
 
 	void HideGreystone();
 	void HideCountess();
@@ -32,44 +32,41 @@ public:
 	int32 CharacterMeshIdx = 0;
 
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadonly, meta = (AllowPrivateAccess = "true"))
-		class USceneComponent* RootScene;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USceneComponent* RootScene;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadonly, meta = (AllowPrivateAccess = "true"))
-		class USceneComponent* Greystones;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USceneComponent* Greystones;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadonly, meta = (AllowPrivateAccess = "true"))
-		class USceneComponent* Countesses;
-
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadonly, meta = (AllowPrivateAccess = "true"))
-		class USkeletalMeshComponent* Greystone1;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadonly, meta = (AllowPrivateAccess = "true"))
-		class USkeletalMeshComponent* Greystone2;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadonly, meta = (AllowPrivateAccess = "true"))
-		class USkeletalMeshComponent* Greystone3;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USceneComponent* Countesses;
 
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadonly, meta = (AllowPrivateAccess = "true"))
-		class USkeletalMeshComponent* Countess1;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* Greystone1;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadonly, meta = (AllowPrivateAccess = "true"))
-		class USkeletalMeshComponent* Countess2;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* Greystone2;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadonly, meta = (AllowPrivateAccess = "true"))
-		class USkeletalMeshComponent* Countess3;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* Greystone3;
 
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* Countess1;
 
-	UPROPERTY(VisibleAnywhere)
-		TArray<USkeletalMeshComponent*> GreyStoneArray;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* Countess2;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* Countess3;
+
 
 	UPROPERTY(VisibleAnywhere)
-		TArray<USkeletalMeshComponent*> CountessArray;
+	TArray<USkeletalMeshComponent*> GreyStoneArray;
 
 	UPROPERTY(VisibleAnywhere)
-		class UMyGameInstance* MyGameInstanceRef;
+	TArray<USkeletalMeshComponent*> CountessArray;
+
 
 };
