@@ -16,13 +16,11 @@ public:
 	AWeapon_Gun();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	void Fire();
 
 public:
-
 	void StartFire();
 	void StopFire();
 
@@ -60,13 +58,13 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	float BaseDamage;
 
+public:
 	FTimerHandle TimerHandle_TimeBetweenShots;
 
 	float LastFiredTime;
 
-	// 분 당 발사된 총알 개수
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-	float RateOfFire;
+	float RateOfFire; 	// 분 당 발사된 총알 개수
 
 	float TimeBetweenShots;
 

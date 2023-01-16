@@ -334,7 +334,8 @@ void ACharacter_Parent::Attack()
 	if (IsAttacking)
 		return;
 
-	if (CurrentWeaponIndex == EWeapon::Sword) { Sword->Attack(Stat->GetAttack(), 150.f, nullptr); }
+	if (CurrentWeaponIndex == EWeapon::Sword) 
+	{ Sword->Attack(Stat->GetAttack(), 150.f, nullptr); }
 	if (CurrentWeaponIndex == EWeapon::Gun) { Gun->StartFire(); }
 	if (CurrentWeaponIndex == EWeapon::Bow) { Bow->ShootArrow(); }
 	return;
