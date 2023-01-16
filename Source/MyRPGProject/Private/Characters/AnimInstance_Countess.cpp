@@ -39,13 +39,19 @@ UAnimInstance_Countess::UAnimInstance_Countess()
 	{
 		ClimbingCompleteMontage = CC.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> BA(TEXT("AnimMontage'/Game/MainCharacter/Countess/Montages/Bow_AttackDefault.Bow_AttackDefault'"));
+	if (BA.Succeeded())
+	{
+		BowAttackMontage = BA.Object;
+	}
 }
 
 void UAnimInstance_Countess::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
-	auto Pawn = TryGetPawnOwner(); //³ª¸¦ Æ÷ÇÔÇÏ°í ÀÖ´Â PawnÀ» GetÇÏ°Ú´Ù. 
+	auto Pawn = TryGetPawnOwner(); //ë‚˜ë¥¼ ì†Œìœ í•˜ê³  ìžˆëŠ” Pawn 
 	if (IsValid(Pawn))
 	{
 		Speed = Pawn->GetVelocity().Size();
@@ -61,9 +67,10 @@ void UAnimInstance_Countess::NativeUpdateAnimation(float DeltaSeconds)
 
 			WeaponIdx = PlayerCharacter->CurrentWeaponIndex;
 
-			IsCrouched = PlayerCharacter->bIsCrouched;
 			IsOnWall = PlayerCharacter->bIsOnWall;
 			IsClimbingUp = PlayerCharacter->bIsClimbingUp;
+			IsCrouched = PlayerCharacter->bIsCrouched;
+			IsDeath = PlayerCharacter->IsDeath;
 		}
 	}
 }
@@ -88,6 +95,11 @@ void UAnimInstance_Countess::PlayAttackMontageR()
 	Montage_Play(Attack_R, 1.f);
 }
 
+void UAnimInstance_Countess::PlayBowAttackMontage()
+{
+	Montage_Play(BowAttackMontage, 1.f);
+}
+
 void UAnimInstance_Countess::JumpToSection(int32 SectionIndex)
 {
 	FName Name = GetAttackMontageName(SectionIndex);
@@ -110,8 +122,11 @@ void UAnimInstance_Countess::AnimNotify_AttackHit()
 	if (Player)
 	{
 		auto Stat = Player->GetMyStatComponent();
-		TraceDistance = 150.f;
-		OnAttackHit.Broadcast(Stat->GetAttack(), TraceDistance);
+		if (Stat)
+		{
+			TraceDistance = 150.f;
+			OnAttackHit.Broadcast(Stat->GetAttack(), TraceDistance);
+		}
 	}
 }
 
@@ -121,8 +136,11 @@ void UAnimInstance_Countess::AnimNotify_AttackHit_Q()
 	if (Player)
 	{
 		auto Stat = Player->GetMyStatComponent();
-		TraceDistance = 200.f;
-		OnAttackHit_Q.Broadcast(Stat->GetAttack_Q(), TraceDistance);
+		if (Stat)
+		{
+			TraceDistance = 200.f;
+			OnAttackHit_Q.Broadcast(Stat->GetAttack_Q(), TraceDistance);
+		}
 	}
 }
 
@@ -132,8 +150,11 @@ void UAnimInstance_Countess::AnimNotify_AttackHit_E()
 	if (Player)
 	{
 		auto Stat = Player->GetMyStatComponent();
-		TraceDistance = 300.f;
-		OnAttackHit_E.Broadcast(Stat->GetAttack_E(), TraceDistance);
+		if (Stat)
+		{
+			TraceDistance = 300.f;
+			OnAttackHit_E.Broadcast(Stat->GetAttack_E(), TraceDistance);
+		}
 	}
 }
 
@@ -143,8 +164,11 @@ void UAnimInstance_Countess::AnimNotify_AttackHit_R()
 	if (Player)
 	{
 		auto Stat = Player->GetMyStatComponent();
-		TraceDistance = 400.f;
-		OnAttackHit_R.Broadcast(Stat->GetAttack_R(), TraceDistance);
+		if (Stat)
+		{
+			TraceDistance = 400.f;
+			OnAttackHit_R.Broadcast(Stat->GetAttack_R(), TraceDistance);
+		}
 	}
 }
 
