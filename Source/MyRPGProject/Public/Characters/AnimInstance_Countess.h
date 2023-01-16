@@ -31,6 +31,7 @@ public:
 	void PlayAttackMontageQ();
 	void PlayAttackMontageE();
 	void PlayAttackMontageR();
+	void PlayBowAttackMontage();
 
 	void JumpToSection(int32 SectionIndex);
 	FName GetAttackMontageName(int32 SectionIndex);
@@ -40,16 +41,17 @@ public:
 
 private:
 	UFUNCTION()
-		void AnimNotify_AttackHit();
+	void AnimNotify_AttackHit();
 
 	UFUNCTION()
-		void AnimNotify_AttackHit_Q();
+	void AnimNotify_AttackHit_Q();
 
 	UFUNCTION()
-		void AnimNotify_AttackHit_E();
+	void AnimNotify_AttackHit_E();
 
 	UFUNCTION()
-		void AnimNotify_AttackHit_R();
+	void AnimNotify_AttackHit_R();
+
 
 
 public:
@@ -81,6 +83,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", Meta = (AllowPrivateAccess = true))
 	float TraceDistance;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Death", Meta = (AllowPrivateAccess = true))
+	bool IsDeath;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackMontage;
 
@@ -93,6 +98,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* Attack_R;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UAnimMontage* BowAttackMontage;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Climbing", Meta = (AllowPrivateAccess = true))
 	UAnimMontage* ClimbingCompleteMontage;
 
@@ -101,5 +109,5 @@ public:
 	FOnAttackHit_Q OnAttackHit_Q;
 	FOnAttackHit_E OnAttackHit_E;
 	FOnAttackHit_R OnAttackHit_R;
-	
+
 };
