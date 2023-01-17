@@ -16,6 +16,7 @@
 
 AMyPlayerController::AMyPlayerController()
 {
+	// 인게임 UI, 플레이중이라면 항상 떠있어야 하는 위젯입니다. 
 	static ConstructorHelpers::FClassFinder<UInGame> Ingame_Class(TEXT("WidgetBlueprint'/Game/UI/WBP_InGame.WBP_InGame_C'"));
 	if (Ingame_Class.Succeeded())
 	{
@@ -27,6 +28,7 @@ AMyPlayerController::AMyPlayerController()
 		}
 	}
 
+	// 인벤토리 위젯 
 	static ConstructorHelpers::FClassFinder<UInventoryWidget> Inventory_Class(TEXT("WidgetBlueprint'/Game/UI/WBP_Inventory.WBP_Inventory_C'"));
 	if (Inventory_Class.Succeeded())
 	{
@@ -34,14 +36,17 @@ AMyPlayerController::AMyPlayerController()
 		InventoryWidget = CreateWidget(GetWorld(), InventoryHUDClass);
 	}
 
+	// 무기 선택 위젯
 	static ConstructorHelpers::FClassFinder<UWeaponWidget> Weapon_Class(TEXT("WidgetBlueprint'/Game/UI/WBP_Weapon.WBP_Weapon_C'"));
 	if (Weapon_Class.Succeeded())
 		WeaponHUDClass = Weapon_Class.Class;
 
+	// 게임 재시작 위젯
 	static ConstructorHelpers::FClassFinder<UUserWidget> Restart_Class(TEXT("WidgetBlueprint'/Game/UI/WBP_Restart.WBP_Restart_C'"));
 	if (Restart_Class.Succeeded())
 		RestartHUDClass = Restart_Class.Class;
 	
+	// 십자선 위젯
 	static ConstructorHelpers::FClassFinder<UUserWidget> Crosshair_Class(TEXT("WidgetBlueprint'/Game/UI/WBP_Crosshair.WBP_Crosshair_C'"));
 	if (Crosshair_Class.Succeeded())
 	{
@@ -49,10 +54,10 @@ AMyPlayerController::AMyPlayerController()
 		CrosshairWidget = CreateWidget(GetWorld(), CrosshairClass);
 	}
 
+	// 게임 승리 위젯
 	static ConstructorHelpers::FClassFinder<UUserWidget> Winner_Class(TEXT("WidgetBlueprint'/Game/UI/WBP_Win.WBP_Win_C'"));
 	if (Winner_Class.Succeeded())
 		WinnerClass = Winner_Class.Class;
-
 
 	HUDState = EHUDState::HS_Ingame;
 }
@@ -61,8 +66,8 @@ void AMyPlayerController::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	bOnInventoryHUD = false;
-	bOnWeaponHUD = false;
+	bOnInventoryHUD = false;	// 인벤토리 창이 떠 있으면 true, 아니면 false
+	bOnWeaponHUD = false;		// 무기 창이 떠 있으면 true, 아니면 false
 }
 
 void AMyPlayerController::OnPossess(APawn* aPawn)
@@ -78,18 +83,21 @@ void AMyPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner)
 
 	if (bIsWinner)
 	{
+		// 플레이어가 승리라면 Winner 화면 띄우기
 		WinnerWidget = CreateWidget<UWinnerWidget>(GetWorld(), WinnerClass);
 		WinnerWidget->AddToViewport();
-		bShowMouseCursor = true;
-		bEnableClickEvents = true;
 	}
 	else
 	{
-		// LoseScreen 화면 출력
+		// 플레이어가 패배하면 Loser 화면 띄우기
 		ChangeHUDState(HS_Restart);	
 	}
+
+	bShowMouseCursor = true;
+	bEnableClickEvents = true;
 	MyGameInstanceRef = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	MyGameInstanceRef->SetNowLevel(2);
+	MyGameInstanceRef->SetNowLevel(2); 
+	// 이기든 지든 레벨 2부터 시작합니다. 
 }
 
 void AMyPlayerController::RestartLevel()
@@ -189,7 +197,6 @@ bool AMyPlayerController::ApplyHUD(TSubclassOf<class UUserWidget> WidgetToApply,
 
 		else if (WidgetToApply == RestartHUDClass)
 		{
-			//SetPause(true);
 			RestartWidget = CreateWidget<URestartMapWidget>(GetWorld(), WidgetToApply);
 			CurrentWidget->RemoveFromViewport();
 			RestartWidget->AddToViewport();

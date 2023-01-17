@@ -21,7 +21,7 @@ void URestartMapWidget::NativeOnInitialized()
 	if (MyGameInstanceRef)
 	{
 		int32 NowRemainingCount = MyGameInstanceRef->GetRemainingCount();
-		const FString FStringRemaingCount = FString::Printf(TEXT("%d"), NowRemainingCount);
+		const FString FStringRemaingCount = FString::Printf(TEXT("%d"), --NowRemainingCount);
 		RemainingText->SetText(FText::FromString(FStringRemaingCount)); // 현재 남아있는 목숨 횟수를 보여줍니다. 
 	}
 }
