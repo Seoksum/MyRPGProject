@@ -35,7 +35,7 @@ ACharacter_Greystone::ACharacter_Greystone()
 	MyGameInstanceRef = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
 	Mana = 5;
-
+	LandYsize = 1.5f;
 }
 
 void ACharacter_Greystone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -58,11 +58,11 @@ void ACharacter_Greystone::Tick(float DeltaTime)
 		SetActorLocation(GetActorLocation() + GetActorUpVector() * 7.f);
 	}
 
-	if (AttackMoving)
-	{
-		FVector NewLocation1 = GetActorLocation() + GetActorForwardVector() * 7.f;
-		SetActorLocation(NewLocation1);
-	}
+	//if (AttackMoving)
+	//{
+	//	FVector NewLocation1 = GetActorLocation() + GetActorForwardVector() * 7.f;
+	//	SetActorLocation(NewLocation1);
+	//}
 }
 
 void ACharacter_Greystone::BeginPlay()

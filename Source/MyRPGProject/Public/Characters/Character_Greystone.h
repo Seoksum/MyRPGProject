@@ -51,6 +51,8 @@ protected:
 		class UParticleSystem* AttackE_Effect;
 
 
+
+
 private:
 
 	UFUNCTION()
@@ -67,6 +69,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Skill")
 	bool AttackMoving;
+
+	
 
 
 };

@@ -230,5 +230,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		class USoundBase* LevelupSound;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere)
+		float LandYsize;
+
+
 };

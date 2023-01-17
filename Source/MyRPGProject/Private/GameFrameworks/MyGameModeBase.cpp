@@ -47,7 +47,7 @@ AMyGameModeBase::AMyGameModeBase()
 					DefaultPawnClass = BP_Greystone2.Class;
 
 				else if (BP_Greystone3.Succeeded() && CharMeshIndex == 2)
-					DefaultPawnClass = BP_Greystone3.Class; //BP_Greystone1.Class;
+					DefaultPawnClass = BP_Greystone3.Class; 
 			}
 
 			// 캐릭터가 Countess

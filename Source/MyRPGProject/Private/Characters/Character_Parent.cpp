@@ -177,9 +177,14 @@ void ACharacter_Parent::Tick(float DeltaTime)
 	{
 		FVector Loc = GetActorLocation();
 		SetActorLocation(FVector(Loc.X, Loc.Y, Loc.Z + 1.5f));
-		// 등반하는 상황이라면 플레이어를 Z축으로 이동시킵니다. 
 	}
 
+	// 벽 위를 더 이상 오를 수 없어 착지해야할 때
+	if (bIsClimbingComplete)
+	{
+		SetActorLocation(GetActorLocation() + GetActorForwardVector() * 1.5f);
+		SetActorLocation(GetActorLocation() + GetActorUpVector() * LandYsize);
+	}
 }
 
 // Called to bind functionality to input
@@ -576,6 +581,7 @@ void ACharacter_Parent::ReleaseClimbingUp()
 {
 	bIsClimbingUp = false; // 한 번 등반이 완료된 후 bIsClimbingUp은 false가 됩니다. 
 	GetWorld()->GetTimerManager().ClearTimer(ClimbingHandle); 
+	bIsClimbingComplete = false;
 }
 
 void ACharacter_Parent::CameraShakeCheck()

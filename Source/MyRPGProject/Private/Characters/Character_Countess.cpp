@@ -35,7 +35,7 @@ ACharacter_Countess::ACharacter_Countess()
 	MyGameInstanceRef = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
 	Mana = 5;
-
+	LandYsize = 10.f;
 }
 
 void ACharacter_Countess::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -51,11 +51,6 @@ void ACharacter_Countess::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bIsClimbingComplete)
-	{
-		SetActorLocation(GetActorLocation() + GetActorForwardVector() * 3.f);
-		SetActorLocation(GetActorLocation() + GetActorUpVector() * 7.f);
-	}
 }
 
 
